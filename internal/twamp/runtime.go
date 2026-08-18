@@ -108,7 +108,12 @@ func WaitReflector(ctx context.Context, d time.Duration) error {
 
 func ParseTWAMPJSON(b []byte) (map[string]int, error) {
 	var m map[string]int
-	_ = json.Unmarshal(b, &m)
+	if len(b) == 0 {
+		return nil, errors.New("empty twamp json")
+	}
+	if err := json.Unmarshal(b, &m); err != nil {
+		return nil, err
+	}
 	return m, nil
 }
 
